@@ -2,8 +2,10 @@ xserver-xorg-video-ati (1:6.5.7.3-2) experimental; urgency=low
 
   * Port patches from trunk
     + general/043_ati_r128_update_chip_identification.diff
+  * Apply ppc-fix.patch and incorporate it in to our patch system instead of
+    just having it sit in the debian directory
 
- -- David Nusinow <dnusinow@debian.org>  Sun, 26 Feb 2006 17:42:45 -0500
+ -- David Nusinow <dnusinow@debian.org>  Sun, 26 Feb 2006 17:46:59 -0500
 
 xserver-xorg-video-ati (1:6.5.7.3-1) experimental; urgency=low
 
