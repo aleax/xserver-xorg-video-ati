@@ -1,3 +1,10 @@
+xserver-xorg-video-ati (1:6.5.7.3-2) experimental; urgency=low
+
+  * Port patches from trunk
+    + general/043_ati_r128_update_chip_identification.diff
+
+ -- David Nusinow <dnusinow@debian.org>  Sun, 26 Feb 2006 17:42:45 -0500
+
 xserver-xorg-video-ati (1:6.5.7.3-1) experimental; urgency=low
 
   * First upload to Debian
