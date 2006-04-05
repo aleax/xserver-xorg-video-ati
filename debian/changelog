@@ -1,3 +1,9 @@
+xserver-xorg-video-ati (1:6.5.7.3-3) unstable; urgency=low
+
+  * Upload to modular
+
+ -- David Nusinow <dnusinow@debian.org>  Sun, 26 Mar 2006 20:25:26 -0500
+
 xserver-xorg-video-ati (1:6.5.7.3-2) experimental; urgency=low
 
   * Port patches from trunk
