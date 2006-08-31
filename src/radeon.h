@@ -79,6 +79,74 @@
 #include "picturestr.h"
 #endif
 
+typedef enum {
+    OPTION_NOACCEL,
+    OPTION_SW_CURSOR,
+    OPTION_DAC_6BIT,
+    OPTION_DAC_8BIT,
+#ifdef XF86DRI
+    OPTION_BUS_TYPE,
+    OPTION_CP_PIO,
+    OPTION_USEC_TIMEOUT,
+    OPTION_AGP_MODE,
+    OPTION_AGP_FW,
+    OPTION_GART_SIZE,
+    OPTION_GART_SIZE_OLD,
+    OPTION_RING_SIZE,
+    OPTION_BUFFER_SIZE,
+    OPTION_DEPTH_MOVE,
+    OPTION_PAGE_FLIP,
+    OPTION_NO_BACKBUFFER,
+    OPTION_XV_DMA,
+    OPTION_FBTEX_PERCENT,
+    OPTION_DEPTH_BITS,
+#ifdef USE_EXA
+    OPTION_ACCEL_DFS,
+#endif
+#endif
+    OPTION_PANEL_OFF,
+    OPTION_DDC_MODE,
+    OPTION_MONITOR_LAYOUT,
+    OPTION_IGNORE_EDID,
+    OPTION_FBDEV,
+    OPTION_MERGEDFB,
+    OPTION_CRT2HSYNC,
+    OPTION_CRT2VREFRESH,
+    OPTION_CRT2POS,
+    OPTION_METAMODES,
+    OPTION_MERGEDDPI,
+    OPTION_RADEONXINERAMA,
+    OPTION_CRT2ISSCRN0,
+    OPTION_MERGEDFBNONRECT,
+    OPTION_MERGEDFBMOUSER,
+    OPTION_DISP_PRIORITY,
+    OPTION_PANEL_SIZE,
+    OPTION_MIN_DOTCLOCK,
+    OPTION_COLOR_TILING,
+#ifdef XvExtension
+    OPTION_VIDEO_KEY,
+    OPTION_RAGE_THEATRE_CRYSTAL,
+    OPTION_RAGE_THEATRE_TUNER_PORT,
+    OPTION_RAGE_THEATRE_COMPOSITE_PORT,
+    OPTION_RAGE_THEATRE_SVIDEO_PORT,
+    OPTION_TUNER_TYPE,
+    OPTION_RAGE_THEATRE_MICROC_PATH,
+    OPTION_RAGE_THEATRE_MICROC_TYPE,
+#endif
+#ifdef RENDER
+    OPTION_RENDER_ACCEL,
+    OPTION_SUBPIXEL_ORDER,
+#endif
+    OPTION_SHOWCACHE,
+    OPTION_DYNAMIC_CLOCKS,
+    OPTION_BIOS_HOTKEYS,
+    OPTION_VGA_ACCESS,
+    OPTION_REVERSE_DDC,
+    OPTION_LVDS_PROBE_PLL,
+    OPTION_ACCELMETHOD,
+    OPTION_CONSTANTDPI
+} RADEONOpts;
+
 /* ------- mergedfb support ------------- */
 		/* Psuedo Xinerama support */
 #define NEED_REPLIES  		/* ? */
@@ -334,7 +402,8 @@ typedef struct {
     unsigned long     LinearAddr;       /* Frame buffer physical address     */
     unsigned long     MMIOAddr;         /* MMIO region physical address      */
     unsigned long     BIOSAddr;         /* BIOS physical address             */
-    unsigned int      fbLocation;
+    CARD32            fbLocation;
+    CARD32            gartLocation;
     CARD32            mc_fb_location;
     CARD32            mc_agp_location;
 
@@ -416,16 +485,16 @@ typedef struct {
 #define EXA_ENGINEMODE_UNKNOWN 0
 #define EXA_ENGINEMODE_2D      1
 #define EXA_ENGINEMODE_3D      2
+#ifdef XF86DRI
+    Bool              accelDFS;
+#endif
 #endif
 #ifdef USE_XAA
     XAAInfoRecPtr     accel;
 #endif
     Bool              accelOn;
     xf86CursorInfoPtr cursor;
-#ifdef USE_EXA
-    ExaOffscreenArea   *cursorArea;
-#endif
-    unsigned long     cursor_offset;
+    CARD32            cursor_offset;
 #ifdef USE_XAA
     unsigned long     cursor_end;
 #endif
@@ -584,6 +653,7 @@ typedef struct {
     int               backPitch;
     int               depthOffset;
     int               depthPitch;
+    int               depthBits;
     int               textureOffset;
     int               textureSize;
     int               log2TexGran;
@@ -784,6 +854,13 @@ extern void        R300CGWorkaround(ScrnInfoPtr pScrn);
 extern void        RADEONPllErrataAfterIndex(RADEONInfoPtr info);
 extern void        RADEONPllErrataAfterData(RADEONInfoPtr info);
 
+extern Bool        RADEONGetBIOSInfo(ScrnInfoPtr pScrn, xf86Int10InfoPtr pInt10);
+extern Bool        RADEONGetConnectorInfoFromBIOS (ScrnInfoPtr pScrn);
+extern Bool        RADEONGetClockInfoFromBIOS (ScrnInfoPtr pScrn);
+extern Bool        RADEONGetLVDSInfoFromBIOS (ScrnInfoPtr pScrn);
+extern Bool        RADEONGetTMDSInfoFromBIOS (ScrnInfoPtr pScrn);
+extern Bool        RADEONGetHardCodedEDIDFromBIOS (ScrnInfoPtr pScrn);
+
 #ifdef XF86DRI
 #ifdef USE_XAA
 extern void        RADEONAccelInitCP(ScreenPtr pScreen, XAAInfoRecPtr a);
@@ -817,13 +894,6 @@ extern void        RADEONHostDataBlitCopyPass(ScrnInfoPtr pScrn,
 					      unsigned int srcPitch);
 extern void        RADEONCopySwap(CARD8 *dst, CARD8 *src, unsigned int size,
 				  int swap);
-
-extern Bool        RADEONGetBIOSInfo(ScrnInfoPtr pScrn, xf86Int10InfoPtr pInt10);
-extern Bool        RADEONGetConnectorInfoFromBIOS (ScrnInfoPtr pScrn);
-extern Bool        RADEONGetClockInfoFromBIOS (ScrnInfoPtr pScrn);
-extern Bool        RADEONGetLVDSInfoFromBIOS (ScrnInfoPtr pScrn);
-extern Bool        RADEONGetTMDSInfoFromBIOS (ScrnInfoPtr pScrn);
-extern Bool        RADEONGetHardCodedEDIDFromBIOS (ScrnInfoPtr pScrn);
 
 #define RADEONCP_START(pScrn, info)					\
 do {									\

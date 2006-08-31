@@ -22,7 +22,7 @@
 
 AC_PREREQ(2.57)
 AC_INIT([xf86-video-ati],
-        6.6.1,
+        6.6.2,
         [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg],
         xf86-video-ati)
 AC_DEFINE_UNQUOTED([ATI_VERSION_MAJOR],
@@ -135,7 +135,7 @@ case $host_cpu in
     ATIMISC_TV_OUT=yes
     ATIMISC_CPIO=yes
     ;;
-  x86_64|amd64|alpha)
+  x86_64|amd64|alpha|ia64)
     ATIMISC_CPIO=yes
     ;;
   sparc)
@@ -151,19 +151,19 @@ esac
 AC_MSG_CHECKING([whether to include PIO support])
 AM_CONDITIONAL(ATIMISC_CPIO, test "x$ATIMISC_CPIO" = xyes)
 if test "x$ATIMISC_CPIO" = xyes; then
-	echo "yes, PIO"
+	AC_MSG_RESULT([yes, PIO])
 else
 	AC_DEFINE(AVOID_CPIO, 1, [Avoid PIO and use MMIO for atimisc.])
-	echo "no, MMIO"
+	AC_MSG_RESULT([no, MMIO])
 fi
 
 AC_MSG_CHECKING([whether to include support for non-PCI devices])
 AM_CONDITIONAL(ATIMISC_NON_PCI, test "x$ATIMISC_NON_PCI" = xyes)
 if test "x$ATI_AVOID_NON_PCI" = xyes; then
-	echo "yes, PCI and ISA"
+	AC_MSG_RESULT([yes, PCI and ISA])
 else
 	AC_DEFINE(AVOID_NON_PCI, 1, [Only probe PCI cards; do not probe ISA.])
-	echo "no, PCI only"
+	AC_MSG_RESULT([no, PCI only])
 fi
 
 AC_MSG_CHECKING([whether to include DGA support])
@@ -185,11 +185,15 @@ AC_DEFINE(USE_XAA, 1, [Build support for XAA])
 # Properly handle EXA.
 AC_MSG_CHECKING([whether to enable EXA support])
 if test "x$EXA" = xyes; then
-        echo "yes"
-        AC_CHECK_FILE([${sdkdir}/exa.h],
-                      [have_exa_h="yes"], [have_exa_h="no"])
+        AC_MSG_RESULT(yes)
+
+        SAVE_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS $XORG_CFLAGS"
+        AC_CHECK_HEADER(exa.h,
+                       [have_exa_h="yes"], [have_exa_h="no"])
+        CPPFLAGS="$SAVE_CPPFLAGS"
 else
-        echo "no"
+        AC_MSG_RESULT(no)
 fi 
 
 SAVE_CPPFLAGS="$CPPFLAGS"
@@ -204,11 +208,10 @@ if test "x$have_exa_h" = xyes; then
                           ]])],
                           [USE_EXA=yes],
                           [USE_EXA=no])
+        AC_MSG_RESULT($USE_EXA)
+
         if test "x$USE_EXA" = xyes; then
-                echo "yes."
                 AC_DEFINE(USE_EXA, 1, [Build support for Exa])
-        else
-                echo "no."
         fi
 fi
 CPPFLAGS="$SAVE_CPPFLAGS"

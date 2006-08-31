@@ -71,7 +71,9 @@ static void RADEONDRITransitionTo3d(ScreenPtr pScreen);
 static void RADEONDRITransitionMultiToSingle3d(ScreenPtr pScreen);
 static void RADEONDRITransitionSingleToMulti3d(ScreenPtr pScreen);
 
+#ifdef USE_XAA
 static void RADEONDRIRefreshArea(ScrnInfoPtr pScrn, int num, BoxPtr pbox);
+#endif
 
 /* Initialize the visual configs that are supported by the hardware.
  * These are combined with the visual configs that the indirect
@@ -162,14 +164,17 @@ static Bool RADEONInitVisualConfigs(ScreenPtr pScreen)
 		    pConfigs[i].doubleBuffer   = FALSE;
 		pConfigs[i].stereo             = FALSE;
 		pConfigs[i].bufferSize         = 16;
-		pConfigs[i].depthSize          = 16;
-		if (stencil)
+		pConfigs[i].depthSize          = info->depthBits;
+		if (pConfigs[i].depthSize == 24 ? (RADEON_USE_STENCIL - stencil)
+						: stencil) {
 		    pConfigs[i].stencilSize    = 8;
-		else
+		} else {
 		    pConfigs[i].stencilSize    = 0;
+		}
 		pConfigs[i].auxBuffers         = 0;
 		pConfigs[i].level              = 0;
-		if (accum || stencil) {
+		if (accum ||
+		    (pConfigs[i].stencilSize && pConfigs[i].depthSize == 16)) {
 		   pConfigs[i].visualRating    = GLX_SLOW_CONFIG;
 		} else {
 		   pConfigs[i].visualRating    = GLX_NONE;
@@ -245,16 +250,17 @@ static Bool RADEONInitVisualConfigs(ScreenPtr pScreen)
 		    pConfigs[i].doubleBuffer   = FALSE;
 		pConfigs[i].stereo             = FALSE;
 		pConfigs[i].bufferSize         = 32;
-		if (stencil) {
-		    pConfigs[i].depthSize      = 24;
+		pConfigs[i].depthSize          = info->depthBits;
+		if (pConfigs[i].depthSize == 24 ? (RADEON_USE_STENCIL - stencil)
+						: stencil) {
 		    pConfigs[i].stencilSize    = 8;
 		} else {
-		    pConfigs[i].depthSize      = 24;
 		    pConfigs[i].stencilSize    = 0;
 		}
 		pConfigs[i].auxBuffers         = 0;
 		pConfigs[i].level              = 0;
-		if (accum) {
+		if (accum ||
+		    (pConfigs[i].stencilSize && pConfigs[i].depthSize == 16)) {
 		   pConfigs[i].visualRating    = GLX_SLOW_CONFIG;
 		} else {
 		   pConfigs[i].visualRating    = GLX_NONE;
@@ -425,6 +431,10 @@ static void RADEONLeaveServer(ScreenPtr pScreen)
 
 	info->CPInUse = FALSE;
     }
+
+#ifdef USE_EXA
+    info->engineMode = EXA_ENGINEMODE_UNKNOWN;
+#endif
 }
 
 /* Contexts can be swapped by the X server if necessary.  This callback
@@ -448,6 +458,8 @@ static void RADEONDRISwapContext(ScreenPtr pScreen, DRISyncType syncType,
 	RADEONLeaveServer(pScreen);
     }
 }
+
+#ifdef USE_XAA
 
 /* The Radeon has depth tiling on all the time. Rely on surface regs to
  * translate the addresses (only works if allowColorTiling is true).
@@ -508,6 +520,8 @@ static void RADEONScreenToScreenCopyDepth(ScrnInfoPtr pScrn,
 	break;
     }
 }
+
+#endif /* USE_XAA */
 
 /* Initialize the state of the back and depth buffers */
 static void RADEONDRIInitBuffers(WindowPtr pWin, RegionPtr prgn, CARD32 indx)
@@ -1061,14 +1075,14 @@ static int RADEONDRIKernelInit(RADEONInfoPtr info, ScreenPtr pScreen)
     drmInfo.usec_timeout        = info->CPusecTimeout;
 
     drmInfo.fb_bpp              = info->CurrentLayout.pixel_code;
-    drmInfo.depth_bpp           = info->CurrentLayout.pixel_code;
+    drmInfo.depth_bpp           = (info->depthBits - 8) * 2;
 
     drmInfo.front_offset        = info->frontOffset;
     drmInfo.front_pitch         = info->frontPitch * cpp;
     drmInfo.back_offset         = info->backOffset;
     drmInfo.back_pitch          = info->backPitch * cpp;
     drmInfo.depth_offset        = info->depthOffset;
-    drmInfo.depth_pitch         = info->depthPitch * cpp;
+    drmInfo.depth_pitch         = info->depthPitch * drmInfo.depth_bpp / 8;
 
     drmInfo.fb_offset           = info->fbHandle;
     drmInfo.mmio_offset         = info->registerHandle;
@@ -1616,6 +1630,7 @@ void RADEONDRIInitPageFlip(ScreenPtr pScreen)
     ScrnInfoPtr         pScrn = xf86Screens[pScreen->myNum];
     RADEONInfoPtr       info  = RADEONPTR(pScrn);
 
+#ifdef USE_XAA
    /* Have shadowfb run only while there is 3d active. This must happen late,
      * after XAAInit has been called 
      */
@@ -1627,7 +1642,9 @@ void RADEONDRIInitPageFlip(ScreenPtr pScreen)
 	} else
 	    xf86DrvMsg(pScrn->scrnIndex, X_INFO,
 		       "ShadowFB initialized for Page Flipping\n");
-    } else {
+    } else
+#endif /* USE_XAA */
+    {
        info->allowPageFlip = 0;
     }
 }
@@ -1782,6 +1799,8 @@ void RADEONDRICloseScreen(ScreenPtr pScreen)
     }
 }
 
+#ifdef USE_XAA
+
 /* Use callbacks from dri.c to support pageflipping mode for a single
  * 3d context without need for any specific full-screen extension.
  *
@@ -1817,7 +1836,6 @@ static void RADEONDRIRefreshArea(ScrnInfoPtr pScrn, int num, BoxPtr pbox)
     if (!pSAREAPriv->pfAllowPageFlip && pSAREAPriv->pfCurrentPage == 0)
 	return;
 
-#ifdef USE_XAA
     /* XXX: implement for EXA */
     /* pretty much a hack. */
 
@@ -1843,16 +1861,17 @@ static void RADEONDRIRefreshArea(ScrnInfoPtr pScrn, int num, BoxPtr pbox)
 	}
     }
     info->dst_pitch_offset &= ~RADEON_DST_TILE_MACRO;
-#endif /* USE_XAA */
 }
+
+#endif /* USE_XAA */
 
 static void RADEONEnablePageFlip(ScreenPtr pScreen)
 {
+#ifdef USE_XAA
     ScrnInfoPtr         pScrn      = xf86Screens[pScreen->myNum];
     RADEONInfoPtr       info       = RADEONPTR(pScrn);
     RADEONSAREAPrivPtr  pSAREAPriv = DRIGetSAREAPrivate(pScreen);
 
-#ifdef USE_XAA
     /* XXX: Fix in EXA case */
     if (info->allowPageFlip) {
         /* pretty much a hack. */
@@ -1903,10 +1922,10 @@ static void RADEONDRITransitionTo3d(ScreenPtr pScreen)
 {
     ScrnInfoPtr    pScrn = xf86Screens[pScreen->myNum];
     RADEONInfoPtr  info  = RADEONPTR(pScrn);
+#ifdef USE_XAA
     FBAreaPtr      fbarea;
     int            width, height;
 
-#ifdef USE_XAA
     /* EXA allocates these areas up front, so it doesn't do the following
      * stuff.
      */

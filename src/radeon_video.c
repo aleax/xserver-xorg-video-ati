@@ -30,13 +30,6 @@
 #include "msp3430.h"
 #include "tda9885.h"
 
-#ifdef USE_EXA
-/* FIXME : the video code hasn't been ported so this is a hack to make
- * it compile at all without too much ifdefing */
-#include "xaa.h"
-#include "xf86fbman.h"
-#endif
-
 #define OFF_DELAY       250  /* milliseconds */
 #define FREE_DELAY      15000
 
@@ -416,7 +409,7 @@ typedef struct tagREF_TRANSFORM
 } REF_TRANSFORM;
 
 /* Parameters for ITU-R BT.601 and ITU-R BT.709 colour spaces */
-REF_TRANSFORM trans[2] =
+static REF_TRANSFORM trans[2] =
 {
     {1.1678, 0.0, 1.6007, -0.3929, -0.8154, 2.0232, 0.0}, /* BT.601 */
     {1.1678, 0.0, 1.7980, -0.2139, -0.5345, 2.1186, 0.0}  /* BT.709 */
@@ -484,7 +477,7 @@ typedef struct tagGAMMA_CURVE_R200
 
 
 /* Preset gammas */
-GAMMA_CURVE_R100 gamma_curve_r100[8] = 
+static GAMMA_CURVE_R100 gamma_curve_r100[8] = 
 {
 	/* Gamma 1.0 */
 	{0x100, 0x0, 
@@ -552,7 +545,7 @@ GAMMA_CURVE_R100 gamma_curve_r100[8] =
 	 0.9135}
 };
 
-GAMMA_CURVE_R200 gamma_curve_r200[8] =
+static GAMMA_CURVE_R200 gamma_curve_r200[8] =
  {
 	/* Gamma 1.0 */
       {0x00000040, 0x00000000,
@@ -2109,6 +2102,7 @@ RADEONCopyData(
     }
 }
 
+#ifdef XF86DRI
 static void RADEON_420_422(
     unsigned int *d,
     unsigned char *s1,
@@ -2123,7 +2117,7 @@ static void RADEON_420_422(
 	n--;
     }
 }
-
+#endif
 
 static void
 RADEONCopyRGB24Data(
@@ -2424,7 +2418,7 @@ RADEONDisplayVideo(
 ){
     RADEONInfoPtr info = RADEONPTR(pScrn);
     unsigned char *RADEONMMIO = info->MMIO;
-    int v_inc, h_inc, h_inc_uv, step_by_y, step_by_uv, tmp;
+    CARD32 v_inc, h_inc, h_inc_uv, step_by_y, step_by_uv, tmp;
     double h_inc_d;
     int p1_h_accum_init, p23_h_accum_init;
     int p1_v_accum_init;
