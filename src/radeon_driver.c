@@ -1994,7 +1994,7 @@ static Bool RADEONPreInitModes(ScrnInfoPtr pScrn, xf86Int10InfoPtr pInt10)
     int            modesFound;
     RADEONEntPtr pRADEONEnt = RADEONEntPriv(pScrn);
     char           *s;
-    RADEONConnector *connector;
+
     /* This option has two purposes:
      *
      * 1. For CRT, if this option is on, xf86ValidateModes (to
@@ -5135,7 +5135,6 @@ static void RADEONRestoreMode(ScrnInfoPtr pScrn, RADEONSavePtr restore)
     RADEONEntPtr pRADEONEnt = RADEONEntPriv(pScrn);
     RADEONController* pCRTC1 = pRADEONEnt->Controller[0];
     RADEONController* pCRTC2 = pRADEONEnt->Controller[1];
-    RADEONConnector *pPort;
 
     xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO, RADEON_LOGLEVEL_DEBUG,
 		   "RADEONRestoreMode(%p)\n", restore);
