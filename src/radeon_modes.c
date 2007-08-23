@@ -777,8 +777,10 @@ int RADEONValidateMergeModes(ScrnInfoPtr pScrn1)
 		xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
 			   "No valid mode found for this DFP/LCD\n");
 	    }
+            xfree(clockRanges);
 	    return 0;
 	}
     }
+    xfree(clockRanges);
     return modesFound;
 }
