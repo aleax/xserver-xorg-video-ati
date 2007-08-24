@@ -5796,23 +5796,21 @@ static void RADEONInitRMXRegisters(ScrnInfoPtr pScrn, RADEONSavePtr save,
     if (Hratio == 1.0 || !(mode->Flags & RADEON_USE_RMX)) {
 	save->fp_horz_stretch |= ((xres/8-1)<<16);
     } else {
-	save->fp_horz_stretch |= ((((unsigned long)
-				    (Hratio * RADEON_HORZ_STRETCH_RATIO_MAX)) &
-				   RADEON_HORZ_STRETCH_RATIO_MASK) |
-				  RADEON_HORZ_STRETCH_BLEND |
-				  RADEON_HORZ_STRETCH_ENABLE |
-				  ((info->PanelXRes/8-1)<<16));
+	save->fp_horz_stretch |= ((((unsigned long)(Hratio * RADEON_HORZ_STRETCH_RATIO_MAX +
+				     0.5)) & RADEON_HORZ_STRETCH_RATIO_MASK) |
+				    RADEON_HORZ_STRETCH_BLEND |
+				    RADEON_HORZ_STRETCH_ENABLE |
+				    ((info->PanelXRes/8-1)<<16));
     }
 
     if (Vratio == 1.0 || !(mode->Flags & RADEON_USE_RMX)) {
 	save->fp_vert_stretch |= ((yres-1)<<12);
     } else {
-	save->fp_vert_stretch |= ((((unsigned long)
-				    (Vratio * RADEON_VERT_STRETCH_RATIO_MAX)) &
-				   RADEON_VERT_STRETCH_RATIO_MASK) |
-				  RADEON_VERT_STRETCH_ENABLE |
-				  RADEON_VERT_STRETCH_BLEND |
-				  ((info->PanelYRes-1)<<12));
+	save->fp_vert_stretch |= ((((unsigned long)(Vratio * RADEON_VERT_STRETCH_RATIO_MAX +
+						0.5)) & RADEON_VERT_STRETCH_RATIO_MASK) |
+				      RADEON_VERT_STRETCH_ENABLE |
+				      RADEON_VERT_STRETCH_BLEND |
+				      ((info->PanelYRes-1)<<12));
     }
 
 }
