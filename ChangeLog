@@ -1,3 +1,91 @@
+commit 84a37d0ed01a2eee80ee30b79ddfd7906decaff1
+Author: Michel Dänzer <michel@tungstengraphics.com>
+Date:   Fri Aug 24 09:39:58 2007 +0200
+
+    Revert "radeon: Round down RMX stretch ratios."
+    
+    This reverts commit 6b736a5c25d968bb09e229e0fbb82162e8447783.
+    
+    See https://bugs.freedesktop.org/show_bug.cgi?id=8983#c6 and
+    https://bugzilla.novell.com/show_bug.cgi?id=220724 .
+
+commit d0f900c857585804fedd501bcf0a603fead271ce
+Author: Alon Ziv <alonz@nolaviz.org>
+Date:   Mon Jul 30 22:47:59 2007 +0300
+
+    radeon: Sane handling of timeouts in WaitForVerticalSync(2).
+    
+    RADEONWaitForVerticalSync() and RADEONWaitForVerticalSync2() need to wait
+    for a timeout specified in milliseconds; looping around usleep() causes
+    the timeout to be unnecessarily long, as the OS may sleep longer than
+    requested (on Linux the minimum actual sleep value may be several ms).
+    
+    The new logic uses gettimeofday() in the loop to see when the (absolute)
+    timeout has arrived.
+    
+    Signed-off-by: Alon Ziv <alonz@nolaviz.org>
+
+commit 732880bfaab2224fd6d38086237e17de843def7d
+Author: Michel Dänzer <michel@tungstengraphics.com>
+Date:   Wed Aug 22 15:32:23 2007 +0200
+
+    radeon: Remove declarations of unused variables.
+
+commit 6b736a5c25d968bb09e229e0fbb82162e8447783
+Author: Sascha Sommer <saschasommer@freenet.de>
+Date:   Wed Aug 22 15:28:58 2007 +0200
+
+    radeon: Round down RMX stretch ratios.
+    
+    Fixes issues with RMX scaling, see
+    https://bugs.freedesktop.org/show_bug.cgi?id=8983 .
+
+commit 26aacfd90e2502c6e2a6c10761b4b2da7971b2bc
+Author: Henry Zhao <henry.zhao@sun.com>
+Date:   Thu Aug 23 19:10:03 2007 +1000
+
+    radeon: bug 11725: fix mergedfb transient vertical bar
+
+commit 3334c247540b113f9c4a5ce1879d8648a45a959a
+Author: Dave Airlie <airlied@linux.ie>
+Date:   Thu Aug 23 18:46:41 2007 +1000
+
+    radeon: bug 11899 + debian 435040 - test for usefbdev before calling int10
+
+commit 8e3a6f83016cd8c4cfd43ceee4cbf0a8dc018b2a
+Author: Roland Bär <roland@verifysoft.de>
+Date:   Thu Aug 23 18:37:35 2007 +1000
+
+    radeon: bug 11861 - dead code removal in radeon_video.c
+
+commit 05c90280e2e17348ceacf760451c9c9e45fd70e5
+Author: Roland Bär <roland@verifysoft.de>
+Date:   Thu Aug 23 18:33:34 2007 +1000
+
+    radeon: bug 11860 fix some mem leaks
+
+commit a0d0fcd3bab765b4db25e04884fd8a342abb9c66
+Author: iLisa Wu <liswu@ati.com>
+Date:   Mon Aug 20 15:44:07 2007 +0200
+
+    Fix crash with no valid mode in xorg.conf's modelist and empty Virtual
+    
+    If the resolution defined in xorg.conf failed to find a matching mode in the
+    supported modelist, and no virtual desktop dimensions are defined the xorg.conf
+    either, virtual X and Y dimension will be set to 0 which will cause Xserver
+    crash.
+    
+    (Novell bugzilla #296856, closed)
+
+commit d0895f67e327bb268fd59fcfd8fc22678d804f57
+Author: Luc Verhaegen <libv@skynet.be>
+Date:   Thu Aug 9 12:11:40 2007 +0200
+
+    AGPFastWrite risk reduction.
+    
+    Actively warn the user in the log about the effects of AGPFastWrite and
+    sanitise AGPFastWrite handling while we're here.
+
 commit 1de52d91ff3a04b9b587b858e1e5be40d3a7fd0a
 Author: Dave Airlie <airlied@linux.ie>
 Date:   Sat Aug 4 17:58:58 2007 +1000
