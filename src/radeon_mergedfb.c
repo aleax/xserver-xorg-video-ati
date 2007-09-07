@@ -2019,7 +2019,7 @@ RADEONSetCursorPositionMerged(ScrnInfoPtr pScrn, int x, int y)
     DisplayModePtr mode1 = CDMPTR->CRT1;
     DisplayModePtr mode2 = CDMPTR->CRT2;
     int            x1, y1, x2, y2;
-    int                total_y1    = pScrn->frameY1 - pScrn->frameY0;
+    int                total_y1    = info->CRT1frameY1 - info->CRT1frameY0;
     int                total_y2    = pScrn2->frameY1 - pScrn2->frameY0;
 
     if (x < 0)                        xorigin = -x+1;
