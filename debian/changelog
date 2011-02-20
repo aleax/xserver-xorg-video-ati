@@ -1,8 +1,8 @@
-xserver-xorg-video-ati (1:6.14.0-1+exp1) UNRELEASED; urgency=low
+xserver-xorg-video-ati (1:6.14.0-1+exp1) experimental; urgency=low
 
   * Rebuild against Xserver 1.10 rc2.
 
- -- Cyril Brulebois <kibi@debian.org>  Sun, 20 Feb 2011 14:00:39 +0100
+ -- Cyril Brulebois <kibi@debian.org>  Sun, 20 Feb 2011 14:01:18 +0100
 
 xserver-xorg-video-ati (1:6.14.0-1) unstable; urgency=low
 
