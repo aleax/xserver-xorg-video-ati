@@ -1,3 +1,25 @@
+xserver-xorg-video-ati (1:6.14.4-6) unstable; urgency=low
+
+  * Update to 6.14.6, minus the Xserver 1.13 compat patches:
+    - r6xx-r9xx: force 1D tiling for buffer with height < 64
+    - Make radeon_setup_kernel_mem failures more graceful and verbose
+    - RADEONCopySwap: Fix RADEON_HOST_DATA_SWAP_16BIT case
+    - radeon: add MacModel entry for SAM440ep embedded board
+    - Fail more gracefully when drm surface manager can't be initialized
+    - radeon: avoid rounding errors in texture coords for textured xv on EG+
+    - radeon: use GB_GR and BG_RG formats for packed yuv video for r600+
+    - radeon: fix smooth startup with tiling enabled
+    - radeon: improve smooth startup fallbacks
+    - radeon: add new PCI ids
+    - Don't wait on a CRTC which has been disabled via DPMS
+    - Don't page-flip or wait on a CRTC while we're VT-switched away
+    - configure: bump libdrm_radeon requirement
+    - UMS: Fix CRTC DPMS state check
+    - Fix up displayWidth vs. virtualX confusion in radeon_setup_kernel_mem()
+    - radeon: require libdrm 2.4.36 for KMS support
+
+ -- Julien Cristau <jcristau@debian.org>  Sat, 12 Jan 2013 16:30:01 +0100
+
 xserver-xorg-video-ati (1:6.14.4-5) unstable; urgency=low
 
   * Update radeon's long description to list the chips mentioned in the
