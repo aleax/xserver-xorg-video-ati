@@ -1,3 +1,10 @@
+xserver-xorg-video-ati (1:7.1.0-0ubuntu2~bpo70+1) wheezy-backports; urgency=low
+
+  * Rebuild for wheezy-backports.
+  * Upload to wheezy-graphics-next
+
+ -- Alexey Bondarchuk <alexey.bondarchuk@aleax.me>  Sun, 28 Apr 2013 17:36:49 +0300
+
 xserver-xorg-video-ati (1:7.1.0-0ubuntu2) raring; urgency=low
 
   * Fix not removing socket and block handler on close (LP: #1157614)
