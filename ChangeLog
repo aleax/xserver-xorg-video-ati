@@ -1,3 +1,348 @@
+commit 12c6a5d196ae8daf231700d8aea18e222cd162e4
+Author: Robert Hooker <sarvatt@ubuntu.com>
+Date:   Fri Mar 15 10:19:09 2013 -0400
+
+    Add debian tree from origin/ubuntu
+
+commit 3e5350bedf50a1a140e0eba08c39ed2451fb9115
+Author: Alex Deucher <alexander.deucher@amd.com>
+Date:   Fri Mar 8 14:07:42 2013 -0500
+
+    radeon: add Richland pci ids
+    
+    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+
+commit bdbf766d8170f6ea6c16b9780ef5a4007730588b
+Author: Alex Deucher <alexander.deucher@amd.com>
+Date:   Fri Mar 8 14:00:09 2013 -0500
+
+    radeon: mark trinity APUs with IGP flag
+    
+    Was missing on trinity.
+    
+    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+
+commit 5ac335eaae135c0e66cc4643908f41174e2f1123
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Fri Mar 8 17:37:41 2013 +0100
+
+    Only parse Option "AccelMethod" if glamor was enabled at build time
+    
+    Will hopefully make it more obvious when it wasn't.
+
+commit f1059e3f0934ccf1ae183099dbd4de700a7c81ac
+Author: Colin Walters <walters@verbum.org>
+Date:   Wed Jan 4 17:37:06 2012 -0500
+
+    autogen.sh: Implement GNOME Build API
+    
+    http://people.gnome.org/~walters/docs/build-api.txt
+    
+    Signed-off-by: Adam Jackson <ajax@redhat.com>
+
+commit 343b01c9bf35b125cd0c3df8db7c01a5fb227bda
+Author: Alex Deucher <alexander.deucher@amd.com>
+Date:   Thu Jan 24 19:57:23 2013 -0500
+
+    radeon/kms: add oland pci ids
+    
+    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+
+commit 9980f1e0e0a5df5fb0c791687e5c98c13089d7d1
+Author: Alex Deucher <alexander.deucher@amd.com>
+Date:   Thu Jan 24 19:52:04 2013 -0500
+
+    radeon: add oland chip family
+    
+    Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+
+commit d89e545826969910226cb96e73b64f18e92d2064
+Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
+Date:   Wed Jan 30 17:21:05 2013 +0100
+
+    bump version post release
+    
+    Signed-off-by: Maarten Lankhorst <maarten.lankhorst@canonical.com>
+
+commit 21a4f3eaca98c1c54bffcdf3926c631cec9c409d
+Author: Maarten Lankhorst <maarten.lankhorst@canonical.com>
+Date:   Wed Jan 30 16:55:27 2013 +0100
+
+    radeon: bump version for release
+    
+    And fixup distcheck..
+    
+    Signed-off-by: Maarten Lankhorst <maarten.lankhorst@canonical.com>
+
+commit 102ee4a24e4c9ba0c0b65d3ca8599dc7e0216c1e
+Author: Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri Jan 11 09:52:32 2013 -0500
+
+    radeon/r200: program RE_WIDTH_HEIGHT properly
+    
+    Values are inclusive.  Mesa already sets these
+    correctly.  Also bump EXA/Xv limits from 2047 to
+    2048.
+    
+    Signed-off-by: Alex Deucher <alexdeucher@gmail.com>
+
+commit 47689ef8b878a56ea094e21a6090b228e67d605e
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Fri Jan 11 15:41:48 2013 +0100
+
+    Make radeon_glamor_create_textured_pixmap() return TRUE without USE_GLAMOR.
+    
+    Otherwise rotation won't work when glamor support isn't built in.
+    
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 1a8c05fd5559be842d8a038df73de34d4b261c15
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Fri Jan 11 13:22:24 2013 +0100
+
+    Make CRTC shadow pixmaps usable by glamor.
+    
+    Fixes rotation with glamor.
+    
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit e5e22d788b103c04d3460a221a3b9dc3be69e0a4
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Thu Jan 10 17:00:16 2013 +0100
+
+    DRI2/r[345]xx: 16 bit depth buffers use square micro tiling.
+    
+    Fixes piglit sanity.tests (with 3D drivers which allocate depth buffers from
+    the X server).
+    
+    Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit f5d2682584c74587890a9795ece7a8917214a83f
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Thu Jan 10 17:00:15 2013 +0100
+
+    DRI2: Properly use buffer depth passed in by client.
+    
+    Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 4e35b2f530e2ca8c7b7220cacd05c661de43d20d
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Thu Jan 10 12:10:52 2013 +0100
+
+    Drop support for X servers older than 1.7.
+    
+    The main purpose is to drop DRI2 compatibility code paths which are getting
+    awkward to deal with and at this point are probably only tested lightly if at
+    all. xserver 1.7 was released more than 3 years ago, and 1.6.2 was already
+    required before.
+    
+    Mostly mechanical, there's probably potential for more cleanups.
+    
+    Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 857d729eb3672443f89c0516f8226eacb37dad2b
+Author: Dave Airlie <airlied@redhat.com>
+Date:   Mon Jan 7 14:13:33 2013 +1000
+
+    radeon: fix damage reporting for slave pixmaps
+    
+    This is definitely more correct, not sure if it'll fix any bugs.
+    
+    Signed-off-by: Dave Airlie <airlied@redhat.com>
+
+commit 6981a5c087165b126c15ba0025cffdba218ab652
+Author: Ilija Hadzic <ihadzic@research.bell-labs.com>
+Date:   Wed Dec 19 10:35:43 2012 -0500
+
+    DRI2: limit the swap rate when CRTC is in DPMS-off state
+    
+    If drawable is displayed on a CRTC and relevant CRTC is in
+    DPMS off state, defer the swap by a fixed (hard-coded) time.
+    
+    This patch fixes a bug that caused an application to render
+    at uncontrolled rate when CRTC goes into DPMS "off" state,
+    thus thrashing the GPU and CPU and likely offsetting the
+    power savings achieved by shutting off the display.
+    
+    Signed-off-by: Ilija Hadzic <ihadzic@research.bell-labs.com>
+    Reviewed-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 3657672207322be651cdb94a811337b7c5668c84
+Author: Ilija Hadzic <ihadzic@research.bell-labs.com>
+Date:   Wed Dec 19 10:35:42 2012 -0500
+
+    DRI2: change signature of radeon_dri2_drawable_crtc
+    
+    Return pointer to the CRTC instead of CRTC ID and expose
+    consider_disabled option in arguments of this function.
+    
+    Signed-off-by: Ilija Hadzic <ihadzic@research.bell-labs.com>
+    Reviewed-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 61d0aec40e2521488c2fe43e7a6823e5c87d94d7
+Author: Ilija Hadzic <ihadzic@research.bell-labs.com>
+Date:   Wed Dec 19 10:35:41 2012 -0500
+
+    video: add option to include disabled CRTCs in best CRTC search
+    
+    This patch adds an option called consider_disabled to
+    radeon_pick_best_crtc function. If this option is set
+    and searching for best-fit CRTC yields nothing, the search
+    will be widened to include CRTCs in DPMS "off" state.
+    The new option is not used yet; it will be in the patches
+    to follow.
+    
+    v2: Do not look at the CRTC mode, we only care about its box.
+    
+    Signed-off-by: Ilija Hadzic <ihadzic@research.bell-labs.com>
+    Reviewed-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit a60d2152e928a7011fc7c44a885a34c3cdd4f0fe
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Thu Dec 27 12:13:57 2012 +0100
+
+    glamor: Enable full 2D acceleration for SI as well.
+    
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 04ebe14fe775d18b534e89b50b90ee293ae1910e
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Thu Dec 27 11:54:27 2012 +0100
+
+    glamor: Release the drawable after passing to glamor_push_pixels
+    
+    Ported from xf86-video-intel commit ca5c028c2b4d9bf02002acd484054fe427ea8d09 .
+    
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit cee7d61b144162974238b282d76a70aa2f14cc0d
+Author: Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue Dec 18 15:49:47 2012 -0500
+
+    exa/Xv: fix coordinate limits on AVIVO IGPs
+    
+    RS6xx asics are r4xx derived, but seem to have r3xx
+    limitations as far as clipping is concerned. Spotted
+    by Michel on IRC.
+    
+    Fixes:
+    https://bugs.freedesktop.org/show_bug.cgi?id=58469
+    
+    Signed-off-by: Alex Deucher <alexdeucher@gmail.com>
+
+commit 3c7d024c2671dac541b8f2daed55040f4fd5d62d
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Wed Dec 12 10:43:55 2012 +0100
+
+    Remove dead option definitions.
+    
+    These were only used with UMS.
+    
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit bdbd84a6c99943f4e012c92ad9cb920cbd676621
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Mon Dec 10 23:35:41 2012 +0100
+
+    Remove local variables total_size_bytes.
+    
+    Not actually used for anything. Refactoring gone wrong?
+    
+    Also remove a comment that doesn't seem to make sense anymore.
+    
+    Stumbled over this due to a warning by clang:
+    
+    ../../src/radeon_kms.c:1562:6: warning: variable 'total_size_bytes' is uninitialized when used here [-Wuninitialized]
+                total_size_bytes += (64 * 4 * 64);
+                ^~~~~~~~~~~~~~~~
+    ../../src/radeon_kms.c:1557:25: note: initialize the variable 'total_size_bytes' to silence this warning
+        int total_size_bytes;
+                            ^
+                             = 0
+    
+    Reviewed-by: Alex Deucher <aleander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit cf0a81547bcde32bdd2b080c0a546a49dd2eb628
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Tue Dec 11 11:48:33 2012 +0100
+
+    Remove unused local variable 'path'.
+    
+    ../../src/radeon_probe.c: In function 'radeon_platform_probe':
+    ../../src/radeon_probe.c:270:11: error: unused variable 'path' [-Werror=unused-variable]
+    
+    Reviewed-by: Alex Deucher <aleander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit d268038a5bdd1655f7533c8dd2edf74fbc82bbee
+Author: Michel Dänzer <michel.daenzer@amd.com>
+Date:   Mon Jul 2 09:07:14 2012 +0200
+
+    Remove dead code flagged by gcc -Wunused-but-set-variable.
+    
+    Reviewed-by: Alex Deucher <aleander.deucher@amd.com>
+    Signed-off-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 793e1b0ea579cce7489aee57a95f20384d6ecce8
+Author: Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu Dec 6 09:21:19 2012 -0500
+
+    radeon: fix ring count in R300PrepareTexturedVideo
+    
+    Fixes:
+    https://bugs.freedesktop.org/show_bug.cgi?id=31364
+    
+    Signed-off-by: Alex Deucher <alexdeucher@gmail.com>
+
+commit f402805b22e4f4f735924d59c69474b24e623a25
+Author: Jerome Glisse <jglisse@redhat.com>
+Date:   Fri Nov 30 10:07:51 2012 -0500
+
+    radeon: avoid copying over itself ddx fb
+    
+    In some rare case it seems that the old fb could already be the
+    ddx fb. As copying from the same bo will trigger a ttm deadlck
+    detection which will result in infinite kernel/userspace loop.
+    Avoid doing any copy as anyway it's useless.
+    
+    Signed-off-by: Jerome Glisse <jglisse@redhat.com>
+    Reviewed-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 60cd6ceaf44b506433aebf6b3a639a17604dfddd
+Author: Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed Nov 21 18:42:56 2012 -0500
+
+    radeon: add new SI pci id
+    
+    Signed-off-by: Alex Deucher <alexdeucher@gmail.com>
+
+commit 53af6aa99dfb67b5223c28d5129a79694165048d
+Author: Jerome Glisse <jglisse@redhat.com>
+Date:   Wed Nov 14 12:15:47 2012 -0500
+
+    radeon: avoid segfault when pixmap exceed GPU capabilities
+    
+    We might get a request for a pixmap/drawable that is too big
+    for GPU capabilities in the dri2 get buffer path. In face of
+    such things just return NULL to dri2 get buffer request. The
+    GL driver should then use something like transparent black to
+    avoid something too ugly on the screen.
+    
+    Signed-off-by: Jerome Glisse <jglisse@redhat.com>
+    Reviewed-by: Michel Dänzer <michel.daenzer@amd.com>
+
+commit 71eeb0833489ece745f1e5dc41379ec63161ee81
+Author: Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue Nov 6 09:43:55 2012 -0500
+
+    bump verion post release
+    
+    Signed-off-by: Alex Deucher <alexdeucher@gmail.com>
+
 commit cf377c991f4c1cd4eee1a8530ba9fdf6f9f63301
 Author: Alex Deucher <alexdeucher@gmail.com>
 Date:   Tue Nov 6 09:12:39 2012 -0500

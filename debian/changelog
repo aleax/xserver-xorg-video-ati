@@ -1,27 +1,11 @@
-xserver-xorg-video-ati (1:7.1.0-0ubuntu2~bpo70+2) wheezy-backports; urgency=low
+xserver-xorg-video-ati (1:7.1.99+git20130315.3e5350be-0ubuntu0sarvatt) raring; urgency=low
 
-  * Rebuild for wheezy-backports.
-  * Remove xserver-xorg-video-mach64 and xserver-xorg-video-r128 from
-    dependences
-  * Upload to wheezy-graphics-next
+  * Checkout from git 20130315 (master branch) up to commit
+    3e5350bedf50a1a140e0eba08c39ed2451fb9115
+  * Only added debian/ tree from origin/ubuntu
+  * Forcing Build-depends to xserver-xorg-dev 2:1.12
 
- -- Alexey Bondarchuk <alexey.bondarchuk@aleax.me>  Mon, 29 Apr 2013 17:11:46 +0300
-
-xserver-xorg-video-ati (1:7.1.0-0ubuntu2~bpo70+1) wheezy-backports; urgency=low
-
-  * Rebuild for wheezy-backports.
-  * Upload to wheezy-graphics-next
-
- -- Alexey Bondarchuk <alexey.bondarchuk@aleax.me>  Sun, 28 Apr 2013 17:36:49 +0300
-
-xserver-xorg-video-ati (1:7.1.0-0ubuntu2) raring; urgency=low
-
-  * Fix not removing socket and block handler on close (LP: #1157614)
-    - fixup-close.patch
-  * Handle drmModeGetConnector failure better.
-    - drmmode-fail.patch
-
- -- Maarten Lankhorst <mlankhorst@raring-amd64.local>  Wed, 20 Mar 2013 14:00:46 +0000
+ -- Robert Hooker <sarvatt@ubuntu.com>  Fri, 15 Mar 2013 10:19:19 -0400
 
 xserver-xorg-video-ati (1:7.1.0-0ubuntu1) raring; urgency=low
 
